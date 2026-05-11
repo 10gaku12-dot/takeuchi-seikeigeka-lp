@@ -365,14 +365,15 @@
     }
     .doc-avatar {
       flex-shrink: 0;
-      width: 135px; height: 135px;
-      border-radius: 50%;
-      overflow: hidden;
+      width: 150px;
+      height: auto;
     }
     .doc-avatar img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top center;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
       display: block;
+      filter: drop-shadow(0 8px 18px rgba(26,111,163,.16));
     }
     .doc-bubble {
       position: relative;
@@ -411,8 +412,22 @@
     }
     @media (max-width: 560px) {
       .doc-message { gap: .75rem; margin: 1.5rem auto 1.75rem; }
-      .doc-avatar  { width: 108px; height: 108px; }
+      .doc-avatar  { width: 115px; }
       .doc-bubble  { font-size: .875rem; padding: .7rem .9rem; }
+    }
+    @media (max-width: 420px) {
+      .doc-message {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .doc-bubble {
+        border-radius: 16px;
+      }
+      .doc-bubble::before,
+      .doc-bubble::after {
+        display: none;
+      }
     }
 
     .symptom-notice {
