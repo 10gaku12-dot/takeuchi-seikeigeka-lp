@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="武内整形外科クリニックの症状チェック・受診前ナビ。腰・膝・肩・首の痛みなど、来院前の不安を分かりやすくご案内します。">
+  <title>症状チェック・受診前ナビ | 武内整形外科クリニック</title>
+  <style>
+    /* =============================================
+       CSS変数 — 変更しやすいよう変数で管理
+    ============================================= */
+    :root {
+      --header-height: 58px;   /* ヘッダー実測値(~64px)より小さく設定 → hero が確実に画面を覆う */
+      --blue:        #1a6fa3;
+      --blue-dark:   #145a8a;
+      --blue-light:  #e8f4fd;
+      --green:       #2d8a6e;
+      --green-light: #e8f5f0;
+      --red:         #c0392b;
+      --yellow-bg:   #fff9e6;
+      --yellow-bd:   #f0c040;
+      --text:        #2c3e50;
+      --text-sub:    #5a6a7a;
+      --bg:          #f8fbff;
+      --white:       #ffffff;
+      --border:      #cde0ef;
+      --shadow-s:    0 2px 8px rgba(0,0,0,.08);
+      --shadow-m:    0 4px 20px rgba(0,0,0,.12);
+      --r-s: 8px;
+      --r-m: 14px;
+      --r-l: 22px;
+    }
+
+    /* =============================================
+       リセット & ベース
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN','Hiragino Sans','Meiryo','Yu Gothic',sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.375rem; }
+    section { padding: 4.5rem 0; }
+    @media (max-width: 560px) { section { padding: 3rem 0; } }
+
+    .anchor { scroll-margin-top: 68px; }
+
+    .sec-title {
+      font-size: clamp(1.375rem, 4vw, 1.75rem);
+      font-weight: bold;
+      color: var(--blue);
+      text-align: center;
+      margin-bottom: .5rem;
+    }
+    .sec-sub {
+      font-size: .9375rem;
+      color: var(--text-sub);
+      text-align: center;
+      margin-bottom: 2.75rem;
+      line-height: 1.75;
+    }
+
+    /* =============================================
+       共通ボタン
+    ============================================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      padding: .875rem 1.625rem;
+      border-radius: var(--r-m);
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, background .15s;
+      text-decoration: none !important;
+      min-height: 52px;
+      line-height: 1.4;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-m); }
+    .btn-white  { background: #fff; color: var(--blue); }
+    .btn-white:hover { background: #f0f8ff; }
+    .btn-ghost  { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.65); }
+    .btn-ghost:hover { background: rgba(255,255,255,.15); }
+    .btn-blue   { background: var(--blue);  color: #fff; }
+    .btn-blue:hover  { background: var(--blue-dark); }
+    .btn-green  { background: var(--green); color: #fff; }
+    .btn-green:hover { background: #236b56; }
+    .btn-lg { padding: 1rem 2rem; font-size: 1.125rem; min-height: 58px; }
+
+    /* =============================================
+       ヘッダー（固定）
+    ============================================= */
+    .site-header {
+      position: sticky; top: 0; z-index: 200;
+      background: #fff;
+      border-bottom: 2px solid var(--blue-light);
+      box-shadow: var(--shadow-s);
+      padding: .65rem 0;
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .clinic-name {
+      font-size: .9375rem; font-weight: bold; color: var(--blue); line-height: 1.3;
+      text-decoration: none; display: block;
+      transition: opacity .15s;
+    }
+    .clinic-name:hover { opacity: .8; text-decoration: none; }
+    .clinic-name small { display: block; font-size: .75rem; font-weight: normal; color: var(--text-sub); }
+    .hd-tel {
+      display: flex; align-items: center; gap: .4rem;
+      background: var(--blue); color: #fff;
+      padding: .5rem 1rem; border-radius: var(--r-s);
+      font-size: .875rem; font-weight: bold; white-space: nowrap;
+    }
+    .hd-tel:hover { background: var(--blue-dark); text-decoration: none; color: #fff; }
+    .hd-tel .tel-long  { display: inline; }
+    .hd-tel .tel-short { display: none; }
+    @media (max-width: 440px) {
+      .hd-tel .tel-long  { display: none; }
+      .hd-tel .tel-short { display: inline; }
+      .hd-tel { padding: .5rem .75rem; }
+    }
+
+    /* =============================================
+       ① ファーストビュー（ヒーロー）
+       ※ 外観写真を入れる場合は .hero に
+         background-image: url('外観写真.jpg');
+         background-size: cover; background-position: center;
+         を追加し、linear-gradient の透過率を調整してください
+    ============================================= */
+
+    /* --- キーフレーム --- */
+    @keyframes fadeUpHero {
+      from { opacity: 0; transform: translateY(22px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+    @keyframes fadeDownHero {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0);     }
+    }
+    @keyframes lineGrow {
+      from { width: 0;     opacity: 0; }
+      to   { width: 120px; opacity: 1; }
+    }
+    @keyframes subtleGlow {
+      0%, 100% { box-shadow: 0 10px 28px rgba(255,255,255,.14); }
+      50%       { box-shadow: 0 12px 34px rgba(255,255,255,.30), 0 0 0 3px rgba(255,255,255,.08); }
+    }
+
+    /* --- ヒーロー本体 --- */
+    /*
+     * min-height の考え方：
+     *   ヒーローは header(~64px) の直下から始まる。
+     *   --header-height: 58px（実測より小さい値）を引くことで
+     *   100dvh−58px のヒーロー高さが得られ、
+     *   64 + (100dvh−58) = 100dvh+6px → 初期表示を確実にカバー。
+     */
+    .hero {
+      position: relative;
+      background: linear-gradient(145deg, #1a6fa3 0%, #2d8a6e 100%);
+      min-height: calc(100vh  - var(--header-height));          /* フォールバック */
+      min-height: calc(100svh - var(--header-height));          /* iOS Safari */
+      min-height: calc(100dvh - var(--header-height));          /* モダンブラウザ */
+      display: flex;
+      align-items: center;
+      padding: 5.5rem 0 6rem;
+      overflow: hidden;
+    }
+    /* 頂点からやわらかい光の滲み */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 72% 48% at 50% 0%, rgba(255,255,255,.15) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      color: #fff; text-align: center;
+      width: 100%;
+    }
+
+    /* バッジ */
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.17);
+      border: 1px solid rgba(255,255,255,.38);
+      border-radius: 50px;
+      padding: .3rem 1.1rem;
+      font-size: .875rem;
+      margin-bottom: 1rem;
+      animation: fadeDownHero .8s ease both;
+    }
+
+    /* キャッチコピー（近くで探している方への入口） */
+    .hero-catch {
+      display: block;
+      width: fit-content;
+      margin: 0 auto 1.5rem;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: #fff;
+      text-shadow: 0 2px 14px rgba(0,0,0,.22);
+      animation: fadeUpHero .85s ease .08s both;
+    }
+    .hero-catch::after {
+      content: "";
+      display: block;
+      width: 64px;
+      height: 2px;
+      margin: .5rem auto 0;
+      background: rgba(255,255,255,.7);
+      border-radius: 999px;
+    }
+
+    /* ガラス風パネル — 中央配置ラッパー（transform競合を避けるため2層構造） */
+    .hero-title-position {
+      /* 親 .container(max-width:900px) に拘束されず画面中央を基準に配置 */
+      width: min(1120px, calc(100vw - 56px));
+      margin-left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 2.25rem;
+    }
+    .hero-title-wrap {
+      /* animation の transform と位置決め transform を分離 */
+      width: 100%;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.22);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 24px;
+      padding: 2.2rem 4.5rem;
+      box-shadow: 0 20px 45px rgba(0,0,0,.15);
+      animation: fadeUpHero .95s ease .15s both;
+    }
+
+    /* 見出し本体 */
+    .hero-title {
+      font-family: "Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+      font-size: clamp(1.9rem, 3.1vw, 2.75rem);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: 0.015em;
+      margin: 0;
+      text-shadow: 0 2px 20px rgba(0,0,0,.30), 0 0 40px rgba(255,255,255,.08);
+      /* 2行構造を flex で制御 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35em;
+    }
+    /* PC：各行を nowrap で固定し、途中折り返しを防ぐ */
+    .hero-title-line-main,
+    .hero-title-line-sub {
+      display: block;
+      white-space: nowrap;
+    }
+
+    /* アクセントライン */
+    .hero-title-line {
+      width: 120px;
+      height: 2px;
+      margin: 1.25rem auto 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent);
+      border-radius: 999px;
+      animation: lineGrow .9s ease .75s both;
+    }
+
+    /* サブコピー */
+    .hero-sub {
+      font-size: clamp(.9375rem, 2.5vw, 1.0625rem);
+      line-height: 2;
+      margin-bottom: 2.25rem;
+      opacity: .95;
+      max-width: 600px;
+      margin-left: auto; margin-right: auto;
+      animation: fadeUpHero .85s ease .45s both;
+    }
+
+    /* CTA ラッパー */
+    .hero-cta {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 0;
+      animation: fadeUpHero .85s ease .65s both;
+    }
+
+    /* 主ボタン強化 */
+    .hero-cta .btn-white {
+      box-shadow: 0 10px 28px rgba(255,255,255,.18);
+      position: relative;
+      animation: subtleGlow 3.5s ease-in-out 1.6s infinite;
+    }
+    .hero-cta .btn-white::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,.35);
+      opacity: 0;
+      transition: opacity .22s;
+    }
+    .hero-cta .btn-white:hover {
+      background: #f0f8ff;
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(255,255,255,.28);
+    }
+    .hero-cta .btn-white:hover::after { opacity: 1; }
+
+    /* スマホ調整 */
+    @media (max-width: 560px) {
+      .hero {
+        min-height: calc(100vh  - var(--header-height));
+        min-height: calc(100svh - var(--header-height));
+        min-height: calc(100dvh - var(--header-height));
+        padding: 3.5rem 0 4.25rem;
+      }
+      .hero-catch { margin-bottom: 1.15rem; }
+      .hero-title-position {
+        width: 94vw;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        margin-bottom: 1.75rem;
+      }
+      .hero-title-wrap {
+        width: 100%;
+        padding: 1.4rem 1rem;
+        border-radius: 18px;
+      }
+      .hero-title {
+        font-size: clamp(1.35rem, 6vw, 1.85rem);
+        line-height: 1.45;
+        letter-spacing: 0.005em;
+        gap: 0.3em;
+      }
+      /* スマホは読みやすさ優先 — nowrap を外して自然な折り返しを許可 */
+      .hero-title-line-main,
+      .hero-title-line-sub {
+        white-space: normal;
+      }
+      .hero-title-line { width: 80px; }
+    }
+
+    /* =============================================
+       ② 症状チェック
+    ============================================= */
+    .symptom-section { background: var(--white); }
+
+    .symptom-notice {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--r-s) var(--r-s) 0;
+      font-size: .9rem; color: var(--text);
+      margin-bottom: 2rem;
+      line-height: 1.75;
+    }
+
+    .symptom-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .875rem;
+      margin-bottom: 1.75rem;
+    }
+    @media (min-width: 560px) { .symptom-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .sym-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .5rem; padding: 1.25rem .625rem;
+      background: var(--bg); border: 2px solid var(--border);
+      border-radius: var(--r-m); cursor: pointer;
+      font-size: .9375rem; font-weight: bold; color: var(--text);
+      text-align: center; line-height: 1.4; min-height: 92px;
+      transition: all .2s;
+    }
+    .sym-btn:hover { border-color: var(--blue); background: var(--blue-light); transform: translateY(-2px); box-shadow: var(--shadow-s); }
+    .sym-btn.active { border-color: var(--blue); background: var(--blue); color: #fff; box-shadow: var(--shadow-m); }
+    .sym-btn .s-icon { font-size: 1.75rem; line-height: 1; }
+
+    /* 結果パネル */
+    .result-panel {
+      display: none;
+      border: 2px solid var(--blue); border-radius: var(--r-l);
+      padding: 1.75rem 1.5rem; box-shadow: var(--shadow-m);
+      animation: fadeDown .3s ease;
+    }
+    .result-panel.show { display: block; }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 560px) { .result-panel { padding: 1.25rem 1rem; } }
+
+    .result-heading {
+      font-size: 1.125rem; font-weight: bold; color: var(--blue);
+      padding-bottom: .75rem; border-bottom: 2px solid var(--blue-light);
+      margin-bottom: 1.25rem;
+    }
+    .result-cards {
+      display: grid; gap: .875rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 560px) { .result-cards { grid-template-columns: 1fr 1fr; } }
+
+    .r-card { background: var(--bg); border-radius: var(--r-m); padding: 1.125rem; }
+    .r-label {
+      display: inline-block; font-size: .8rem; font-weight: bold; color: #fff;
+      background: var(--blue); border-radius: 50px;
+      padding: .2rem .875rem; margin-bottom: .65rem;
+    }
+    .r-card.warn .r-label { background: var(--red); }
+    .r-card.grn  .r-label { background: var(--green); }
+    .r-card ul { list-style: none; }
+    .r-card li {
+      position: relative; padding-left: 1.125rem;
+      font-size: .9rem; line-height: 1.75; padding-top: .2rem;
+    }
+    .r-card li::before { content: '●'; position: absolute; left: 0; top: .45rem; font-size: .5rem; color: var(--blue); }
+    .r-card.warn li::before { color: var(--red); }
+    .r-card.grn  li::before { color: var(--green); }
+
+    .result-note {
+      margin-top: 1.125rem; padding: .875rem 1rem;
+      background: var(--yellow-bg); border: 1px solid var(--yellow-bd);
+      border-radius: var(--r-s); font-size: .875rem; color: #6b4c00;
+      line-height: 1.75;
+    }
+    .result-actions {
+      display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.375rem;
+    }
+    .result-actions .btn { flex: 1; min-width: 180px; font-size: .9375rem; }
+
+    /* =============================================
+       ③ 地域密着セクション
+    ============================================= */
+    .community-section { background: var(--green-light); }
+
+    /* 地域密着セクションのリード文 */
+    .community-lead {
+      background: #fff;
+      border-left: 4px solid var(--green);
+      border-radius: 0 var(--r-m) var(--r-m) 0;
+      padding: 1.125rem 1.375rem;
+      margin-bottom: 2rem;
+      font-size: .9375rem;
+      line-height: 1.85;
+      color: var(--text);
+    }
+    .community-lead strong { color: var(--green); }
+
+    .feature-grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 560px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 840px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .feat-card {
+      background: #fff; border-radius: var(--r-m); padding: 1.5rem;
+      box-shadow: var(--shadow-s); display: flex; gap: .875rem; align-items: flex-start;
+    }
+    .feat-icon {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
+      background: var(--green-light);
+      display: flex; align-items: center; justify-content: center; font-size: 1.625rem;
+    }
+    .feat-card h3 { font-size: .9375rem; font-weight: bold; color: var(--green); margin-bottom: .375rem; }
+    .feat-card p  { font-size: .875rem; color: var(--text-sub); line-height: 1.75; }
+
+    /* =============================================
+       ④ FAQ
+    ============================================= */
+    .faq-section { background: var(--white); }
+    .faq-list { display: grid; gap: .875rem; }
+    .faq-item { border: 1px solid var(--border); border-radius: var(--r-m); overflow: hidden; }
+
+    .faq-q {
+      width: 100%; background: var(--blue-light); border: none;
+      padding: 1.125rem 1.25rem; text-align: left; cursor: pointer;
+      display: flex; align-items: center; gap: .75rem;
+      font-size: 1rem; font-weight: bold; color: var(--blue);
+      transition: background .2s;
+    }
+    .faq-q:hover { background: #d0e8f8; }
+    .faq-q.open  { background: var(--blue); color: #fff; }
+    .faq-q-badge {
+      flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8125rem; font-weight: bold;
+    }
+    .faq-q.open .faq-q-badge { background: rgba(255,255,255,.25); }
+    .faq-q-text { flex: 1; }
+    .faq-chevron { flex-shrink: 0; font-size: 1.1rem; transition: transform .3s; }
+    .faq-q.open .faq-chevron { transform: rotate(180deg); }
+
+    .faq-a {
+      display: none; padding: 1.125rem 1.25rem;
+      border-top: 1px solid var(--border);
+      font-size: .9375rem; line-height: 1.85; color: var(--text);
+    }
+    .faq-a.open { display: block; }
+
+    /* =============================================
+       ⑤ Googleマップ・HP導線
+    ============================================= */
+    .nav-section { background: var(--blue-light); }
+
+    .flow-grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 560px) { .flow-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .flow-step {
+      background: #fff; border-radius: var(--r-m);
+      padding: 1.625rem 1.25rem; text-align: center;
+      box-shadow: var(--shadow-s);
+    }
+    .flow-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--blue); color: #fff; font-size: 1.125rem; font-weight: bold;
+      margin-bottom: .625rem;
+    }
+    .flow-icon { font-size: 2rem; display: block; margin-bottom: .375rem; }
+    .flow-step h3 { font-size: .9375rem; font-weight: bold; color: var(--blue); margin-bottom: .5rem; }
+    .flow-step p  { font-size: .875rem; color: var(--text-sub); line-height: 1.75; }
+
+    /* 導線のメリット説明ボックス */
+    .nav-benefit {
+      background: #fff;
+      border-radius: var(--r-m);
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.5rem;
+      box-shadow: var(--shadow-s);
+      font-size: .9rem;
+      color: var(--text-sub);
+      line-height: 1.85;
+    }
+    .nav-benefit ul { list-style: none; }
+    .nav-benefit li { padding-left: 1.375rem; position: relative; padding-top: .2rem; }
+    .nav-benefit li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: bold; }
+
+    /* アクセス情報ボックス */
+    .access-box {
+      background: #fff; border-radius: var(--r-m);
+      padding: 1.5rem; margin-top: 1.5rem; box-shadow: var(--shadow-s);
+    }
+    .access-box h3 {
+      font-size: 1rem; font-weight: bold; color: var(--blue); margin-bottom: 1rem;
+    }
+    .info-tbl { width: 100%; border-collapse: collapse; font-size: .9375rem; }
+    .info-tbl th, .info-tbl td { padding: .75rem 1rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .info-tbl th { width: 32%; color: var(--text-sub); font-weight: normal; }
+    .info-tbl tr:last-child th, .info-tbl tr:last-child td { border-bottom: none; }
+    .access-btns { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.25rem; justify-content: center; }
+    .access-btns .btn { flex: 1; min-width: 180px; }
+
+    /* =============================================
+       ⑥ 最後のCTA
+    ============================================= */
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
+      color: #fff; text-align: center;
+    }
+    .cta-section .sec-title { color: #fff; }
+    .cta-section .sec-sub   { color: rgba(255,255,255,.85); }
+
+    .cta-grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 560px) { .cta-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .cta-card {
+      background: rgba(255,255,255,.14);
+      border: 2px solid rgba(255,255,255,.3);
+      border-radius: var(--r-l); padding: 1.75rem 1rem;
+      text-align: center; color: #fff;
+      display: flex; flex-direction: column; align-items: center; gap: .65rem;
+      transition: background .2s, transform .15s;
+    }
+    .cta-card:hover { background: rgba(255,255,255,.24); transform: translateY(-2px); text-decoration: none; color: #fff; }
+    .cta-card-icon  { font-size: 2.375rem; }
+    .cta-card-title { font-size: 1.0625rem; font-weight: bold; }
+    .cta-card-desc  { font-size: .8125rem; opacity: .85; line-height: 1.7; }
+
+    /* =============================================
+       フッター
+    ============================================= */
+    .site-footer {
+      background: #243342; color: rgba(255,255,255,.7);
+      padding: 2.5rem 0; font-size: .875rem; text-align: center;
+    }
+    .disclaimer {
+      background: #2e4258;
+      border-left: 4px solid var(--yellow-bd);
+      border-radius: 0 var(--r-s) var(--r-s) 0;
+      padding: 1rem 1.25rem; margin-bottom: 1.75rem;
+      font-size: .875rem; line-height: 1.9;
+      color: rgba(255,255,255,.85); text-align: left;
+    }
+    .footer-info { line-height: 2.1; }
+    .footer-demo-note {
+      margin-top: 1.25rem; font-size: .75rem; color: rgba(255,255,255,.4); line-height: 1.8;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー（固定） -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="https://takeuchi-seikei.jp/" class="clinic-name" target="_blank" rel="noopener noreferrer">
+        武内整形外科クリニック
+        <small>症状チェック・受診前ナビ</small>
+      </a>
+      <a href="tel:0263328611" class="hd-tel">
+        📞<span class="tel-long"> 0263-32-8611</span><span class="tel-short"> 電話する</span>
+      </a>
+    </div>
+  </header>
+
+
+  <!-- ① ファーストビュー
+       外観写真を入れる場合：
+       .hero に background-image: url('外観写真.jpg'); background-size: cover; を追加し、
+       linear-gradient の透過率を調整してください（例: rgba(20,90,140,.65)）
+  -->
+  <section class="hero">
+    <div class="container hero-inner">
+
+      <!-- ① クリニック名バッジ -->
+      <div class="hero-badge">🏥 松本市元町 武内整形外科クリニック</div>
+
+      <!-- ② キャッチコピー：近くで探している方への入口 -->
+      <p class="hero-catch">近くで整形外科をお探しの方へ。</p>
+
+      <!-- ③ メイン見出し（ガラス風パネル） -->
+      <div class="hero-title-position">
+        <div class="hero-title-wrap">
+          <h1 class="hero-title">
+            <span class="hero-title-line-main">長年、地域のかかりつけ整形外科として</span>
+            <span class="hero-title-line-sub">選ばれ続けてきた理由</span>
+          </h1>
+          <div class="hero-title-line"></div>
+        </div>
+      </div>
+
+      <!-- ④ サブコピー -->
+      <p class="hero-sub">
+        腰・膝・肩・首の痛み、しびれ、転倒後の不安、骨密度のご相談まで。<br>
+        来院前に確認したいことを、分かりやすくご案内します。
+      </p>
+
+      <!-- ⑤ CTAボタン -->
+      <div class="hero-cta">
+        <a href="#symptom" class="btn btn-white btn-lg">🔍 症状をチェックする</a>
+        <a href="#access"  class="btn btn-ghost  btn-lg">🕐 受付時間を見る</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ② 症状チェック -->
+  <section class="symptom-section anchor" id="symptom">
+    <div class="container">
+      <h2 class="sec-title">症状チェック</h2>
+      <p class="sec-sub">当てはまる症状を選ぶと、来院前の確認事項をご案内します</p>
+
+      <div class="symptom-notice">
+        ⚠️ このチェックは診断を行うものではありません。受診の目安や来院前の準備をご案内するものです。<br>
+        強い痛みや急な症状がある場合は、早めに医療機関にご相談ください。
+      </div>
+
+      <div class="symptom-grid" id="symptomGrid">
+        <button class="sym-btn" data-sym="back">
+          <span class="s-icon">🔴</span><span>腰が痛い</span>
+        </button>
+        <button class="sym-btn" data-sym="knee">
+          <span class="s-icon">🔵</span><span>膝が痛い</span>
+        </button>
+        <button class="sym-btn" data-sym="shoulder">
+          <span class="s-icon">🟢</span><span>肩・首がつらい</span>
+        </button>
+        <button class="sym-btn" data-sym="numb">
+          <span class="s-icon">⚡</span><span>手足のしびれ</span>
+        </button>
+        <button class="sym-btn" data-sym="injury">
+          <span class="s-icon">🩹</span><span>転んだ・ぶつけた</span>
+        </button>
+        <button class="sym-btn" data-sym="sports">
+          <span class="s-icon">⚽</span><span>スポーツで痛めた</span>
+        </button>
+        <button class="sym-btn" data-sym="bone">
+          <span class="s-icon">🦴</span><span>骨密度が気になる</span>
+        </button>
+        <button class="sym-btn" data-sym="stiff">
+          <span class="s-icon">🤲</span><span>関節がこわばる</span>
+        </button>
+      </div>
+
+      <!-- 結果表示エリア（JSで内容を生成） -->
+      <div class="result-panel" id="resultPanel">
+        <div class="result-heading" id="resultHeading"></div>
+        <div class="result-cards"  id="resultCards"></div>
+        <div class="result-note"   id="resultNote"></div>
+        <div class="result-actions">
+          <a href="#access"        class="btn btn-blue" >🕐 受付時間を確認する</a>
+          <a href="tel:0263328611" class="btn btn-green">📞 電話でお問い合わせ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ③ 地域密着セクション -->
+  <section class="community-section">
+    <div class="container">
+      <h2 class="sec-title">地域の皆さまの身近な整形外科として</h2>
+      <p class="sec-sub">松本市元町で、気軽に相談できるかかりつけ整形外科を目指しています</p>
+
+      <!-- 地域密着・競合対策のリード文 -->
+      <div class="community-lead">
+        新しい医療機関や設備の情報が増える中でも、患者さんにとって大切なのは、<strong>「日常の痛みを気軽に相談できること」</strong>、<strong>「通いやすく、来院前の不安が少ないこと」</strong>、<strong>「長く相談できる地域のかかりつけがあること」</strong>だと考えています。<br>
+        武内整形外科クリニックは、はじめての方にも、長年通ってくださっている方にも、安心してご相談いただける医院づくりを大切にしています。
+      </div>
+
+      <div class="feature-grid">
+        <div class="feat-card">
+          <div class="feat-icon">💬</div>
+          <div>
+            <h3>迷ったときに、すぐ相談できる</h3>
+            <p>「この程度で受診していいのか」と迷う必要はありません。日常の小さな痛みや不安も、お気軽にご相談ください。</p>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🏥</div>
+          <div>
+            <h3>腰・膝・肩・首、幅広く対応</h3>
+            <p>整形外科に関わる幅広い症状に対応しています。急な痛みから、慢性的なお悩みまでご相談いただけます。</p>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🦴</div>
+          <div>
+            <h3>骨密度測定・骨粗鬆症の相談</h3>
+            <p>骨密度測定を実施しています。「転倒が心配」「骨の強さが気になる」という方もお気軽にどうぞ。</p>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🏋️</div>
+          <div>
+            <h3>理学療法士によるリハビリ</h3>
+            <p>理学療法士が在籍しており、痛みの軽減や動きの回復を一緒にサポートします。継続的なリハビリにも対応しています。</p>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">👋</div>
+          <div>
+            <h3>はじめての方も、長年の方も</h3>
+            <p>初めてのご来院でも丁寧にご案内します。地域のかかりつけ医院として、長くお付き合いいただけることを大切にしています。</p>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">📍</div>
+          <div>
+            <h3>アクセスしやすい立地</h3>
+            <p>JR松本駅から車で約10分。バス停「自動車学校前」から徒歩3分。駐車場15台完備で、お車でも安心です。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ④ よくある質問 -->
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="sec-title">よくある質問</h2>
+      <p class="sec-sub">来院前によく聞かれることをまとめました</p>
+      <div class="faq-list" id="faqList"></div>
+    </div>
+  </section>
+
+
+  <!-- ⑤ Googleマップ・HP導線 -->
+  <section class="nav-section anchor" id="access">
+    <div class="container">
+      <h2 class="sec-title">Googleマップやホームページから、来院前の不安解消へ</h2>
+      <p class="sec-sub">
+        受付時間・症状の目安・持ち物・アクセスをまとめて確認できます。<br>
+        電話する前に不安を解消して、スムーズにご来院いただける導線を整えています。
+      </p>
+
+      <div class="flow-grid">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <span class="flow-icon">🗺️</span>
+          <h3>GoogleマップやHPで発見</h3>
+          <p>「整形外科 松本市」などで検索し、武内整形外科クリニックをお探しください。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <span class="flow-icon">📋</span>
+          <h3>このページで不安を解消</h3>
+          <p>症状の目安・受付時間・持ち物・アクセスを事前に確認。電話の前に必要な情報が揃います。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <span class="flow-icon">🏥</span>
+          <h3>安心してご来院へ</h3>
+          <p>準備が整った状態でご来院いただけるので、受付もスムーズです。</p>
+        </div>
+      </div>
+
+      <!-- 導線のメリット（提案デモとして院長にも伝わるよう） -->
+      <div class="nav-benefit">
+        <ul>
+          <li>来院前に受付時間・持ち物・アクセスを確認できるので、受付へのよくある問い合わせが減らせます</li>
+          <li>「この症状は整形外科で診てもらえるのか？」という不安を事前に解消し、来院へのハードルを下げます</li>
+          <li>GoogleマップやHPを見た患者さんが「ここなら安心して相談できる」と感じられる導線になります</li>
+        </ul>
+      </div>
+
+      <!-- アクセス情報 -->
+      <div class="access-box">
+        <h3>📍 受付時間・アクセス</h3>
+        <table class="info-tbl">
+          <tr>
+            <th>診療時間</th>
+            <td>
+              月〜金：9:00〜12:30 ／ 14:30〜18:30<br>
+              受付：午前 8:45〜12:15 ／ 午後 14:30〜18:15<br>
+              <strong>休診：土・日・祝日</strong>
+            </td>
+          </tr>
+          <tr>
+            <th>住所</th>
+            <td>〒390-0803　長野県松本市元町2-9-16</td>
+          </tr>
+          <tr>
+            <th>電話番号</th>
+            <td><a href="tel:0263328611">0263-32-8611</a></td>
+          </tr>
+          <tr>
+            <th>駐車場</th>
+            <td>第1・第2駐車場あり（計15台）</td>
+          </tr>
+          <tr>
+            <th>電車・バス</th>
+            <td>JR松本駅より車で約10分<br>アルピコ交通「自動車学校前」バス停より徒歩3分</td>
+          </tr>
+        </table>
+        <div class="access-btns">
+          <a href="https://takeuchi-seikei.jp/" target="_blank" rel="noopener noreferrer"
+             class="btn btn-blue">🌐 公式ホームページへ</a>
+          <a href="https://maps.google.com/?q=武内整形外科クリニック+長野県松本市元町2-9-16" target="_blank" rel="noopener noreferrer"
+             class="btn btn-green">📍 Googleマップで見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ⑥ 最後のCTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="sec-title">まずはお気軽にご相談ください</h2>
+      <p class="sec-sub">地域のかかりつけ整形外科として、皆さまをサポートします</p>
+      <div class="cta-grid">
+        <a href="#access" class="cta-card">
+          <span class="cta-card-icon">🕐</span>
+          <span class="cta-card-title">受付時間を確認する</span>
+          <span class="cta-card-desc">診療時間・休診日を確認して、ご来院の計画を立てましょう</span>
+        </a>
+        <a href="tel:0263328611" class="cta-card">
+          <span class="cta-card-icon">📞</span>
+          <span class="cta-card-title">0263-32-8611</span>
+          <span class="cta-card-desc">ご不明な点やご不安な点は、お電話でお気軽にご相談ください</span>
+        </a>
+        <a href="https://maps.google.com/?q=武内整形外科クリニック+長野県松本市元町2-9-16" target="_blank" rel="noopener noreferrer" class="cta-card">
+          <span class="cta-card-icon">📍</span>
+          <span class="cta-card-title">アクセスを見る</span>
+          <span class="cta-card-desc">医院の場所・駐車場情報を確認してスムーズにご来院ください</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ⑦ フッター（医療上の注意書き） -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="disclaimer">
+        ⚠️ <strong>医療上の注意</strong><br>
+        本ページは診断を行うものではありません。症状や治療については医師の診察を受けてご相談ください。強い痛み、しびれ、外傷、急な症状がある場合は早めに医療機関へご相談ください。
+      </div>
+      <div class="footer-info">
+        <strong>武内整形外科クリニック</strong><br>
+        〒390-0803　長野県松本市元町2-9-16　TEL：0263-32-8611
+      </div>
+      <div class="footer-demo-note">
+        ※ このページは提案用のデモページです。実際の公開前には、院長・医院側による医療表現・掲載内容の確認が必要です。<br>
+        © 武内整形外科クリニック
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- JavaScript -->
+  <script>
+  /* =============================================
+     症状データ
+     各症状カード：4種類、各3〜4項目
+     病名の断定・診断的表現は避け「〜の場合」「〜がある場合」で統一
+  ============================================= */
+  const SYMPTOMS = {
+    back: {
+      heading: '腰の痛みについてのご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '腰や背中の痛み・だるさ・こわばり',
+            '急な腰の痛み（ぎっくり腰など）',
+            '腰からお尻・足にかけての痛みやだるさ',
+            '長時間の立ち仕事・座り仕事による慢性的な腰の不調',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '安静にしても痛みが続く・日に日に増している',
+            '足のしびれや力の入りにくさがある',
+            '起き上がり・歩行など日常の動作がつらい',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            'いつから・どんな動作で痛むか',
+            '足のしびれや感覚の変化の有無',
+            '現在服用中のお薬',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳（お持ちの方）',
+            '紹介状・レントゲン等（他院からの場合）',
+          ]
+        },
+      ],
+      note: '※ 上記はあくまで受診の目安です。「この程度で受診していいのか」と迷う場合も、ご不安であればお気軽にご相談ください。診断・治療については医師にご相談ください。'
+    },
+
+    knee: {
+      heading: '膝の痛みについてのご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '膝の痛み・腫れ・違和感',
+            '階段の上り下りや歩行中につらさがある',
+            '膝に水がたまる感じがある',
+            'スポーツ中・後の膝の痛み',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '膝が腫れている・熱を持っている',
+            '転倒や衝撃のあとに急に痛くなった',
+            '日常の歩行に支障が出ている',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            'いつから・片膝か両膝か',
+            '腫れ・熱感の有無',
+            '過去の膝のケガや手術歴',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳（お持ちの方）',
+            '動きやすい・脱ぎやすい服装',
+          ]
+        },
+      ],
+      note: '※ 上記はあくまで受診の目安です。「大したことないかも」と感じる場合も、ご不安であればお気軽にご相談ください。診断・治療については医師にご相談ください。'
+    },
+
+    shoulder: {
+      heading: '肩・首のつらさについてのご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '肩の痛み・腕が上がりにくい（いわゆる四十肩・五十肩など）',
+            '首のこりや痛み・張り',
+            '長時間のデスクワーク・スマートフォン使用による不調',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '腕や手にしびれがある',
+            '夜間も痛みで眠れない',
+            '転倒後や衝撃のあとから症状が出た',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            'いつから・どんな動作で悪化するか',
+            '腕・手指のしびれの有無',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳（お持ちの方）',
+            '肩周りを診察しやすい服装',
+          ]
+        },
+      ],
+      note: '※ 症状の程度にかかわらず、気になることがあればお気軽にご相談ください。診断・治療については医師にご相談ください。'
+    },
+
+    numb: {
+      heading: '手足のしびれについてのご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '手・指・足のしびれや感覚の違和感',
+            '首や腰の痛みとともに出るしびれ',
+            '慢性的なじんじん感・しびれ',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '急に強いしびれが出た',
+            '力が入りにくい・つまずきやすい感じがある',
+            '両手・両足にしびれがある',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            'しびれる部位（どこが）・いつから',
+            '持続的か、断続的か',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳（お持ちの方）',
+            'しびれる部位をメモ・図にしてくると診察がスムーズです',
+          ]
+        },
+      ],
+      note: '※ しびれには整形外科以外が関係するケースもあります。気になる症状はお気軽にご相談ください。診断・治療については医師にご相談ください。'
+    },
+
+    injury: {
+      heading: '転んだ・ぶつけた場合のご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '打撲・捻挫の確認と処置',
+            '転倒後の痛みや腫れのチェック',
+            '固定・湿布などの処置',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '激しい痛みがあり体重をかけられない',
+            '腫れや内出血が著しい',
+            '高齢の方で転倒後に腰・手首などが痛む',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            'いつ・どのような状況で受傷したか',
+            '痛みの部位・腫れの有無',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳（お持ちの方）',
+            '動かしやすい・脱ぎやすい服装',
+          ]
+        },
+      ],
+      note: '※ 頭部への強い衝撃があった場合は、脳神経外科や救急外来にご相談ください。歩けないほどつらい場合は早めに医療機関へご連絡ください。'
+    },
+
+    sports: {
+      heading: 'スポーツでの痛みについてのご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '捻挫・打撲などの処置と確認',
+            '繰り返す痛みや慢性的な違和感のご相談',
+            'スポーツ復帰に向けたリハビリのご相談',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '強い腫れ・痛みがある',
+            '体重をかけると激しく痛む',
+            '痛みが1週間以上引かない',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            'どのスポーツで・どの動作のとき',
+            '腫れ・内出血の有無',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳（お持ちの方）',
+            '診察しやすい服装',
+          ]
+        },
+      ],
+      note: '※ 「たいしたことないかも」と感じても、痛みが続く場合はお気軽にご相談ください。診断・治療については医師にご相談ください。'
+    },
+
+    bone: {
+      heading: '骨密度が気になる場合のご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '骨密度測定のご相談',
+            '骨粗鬆症の予防・対策に関するご相談',
+            '転倒・骨折が心配な方のご相談',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '身長が以前より縮んだ気がする',
+            '背中や腰が丸くなってきた',
+            '転倒が心配・骨折の経験がある',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            '最後に骨密度を測定した時期（あれば）',
+            '現在服用中のお薬',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳',
+            '以前の検査結果・紹介状（あれば）',
+          ]
+        },
+      ],
+      note: '※ 骨密度の測定や骨粗鬆症のご相談については医師にご確認ください。'
+    },
+
+    stiff: {
+      heading: '関節のこわばりについてのご案内',
+      cards: [
+        {
+          type: 'normal', label: '整形外科で相談できる内容',
+          items: [
+            '朝の手・指・関節のこわばりや違和感',
+            '関節の腫れや痛みとともにこわばりがある',
+            '加齢に伴う関節の不具合',
+          ]
+        },
+        {
+          type: 'warn', label: '受診を検討した方がよい目安',
+          items: [
+            '朝のこわばりが30分以上続く',
+            '複数の関節が同時に腫れて痛む',
+            '日常生活に支障が出ている',
+          ]
+        },
+        {
+          type: 'grn', label: '来院前に確認しておくこと',
+          items: [
+            'どの関節がこわばるか・いつから',
+            'こわばりの時間帯と持続時間',
+          ]
+        },
+        {
+          type: 'normal', label: 'お持ちいただくもの',
+          items: [
+            '健康保険証',
+            'お薬手帳',
+            '症状のメモ（どの関節・いつから・どんな状況で）',
+          ]
+        },
+      ],
+      note: '※ 関節のこわばりには整形外科以外が関係するケースもあります。気になる症状はお気軽にご相談ください。診断・治療については医師にご相談ください。'
+    },
+  };
+
+
+  /* =============================================
+     症状チェック — クリック処理
+  ============================================= */
+  const symBtns       = document.querySelectorAll('.sym-btn');
+  const resultPanel   = document.getElementById('resultPanel');
+  const resultHeading = document.getElementById('resultHeading');
+  const resultCards   = document.getElementById('resultCards');
+  const resultNote    = document.getElementById('resultNote');
+
+  symBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key  = btn.dataset.sym;
+      const data = SYMPTOMS[key];
+      if (!data) return;
+
+      symBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      resultHeading.textContent = data.heading;
+
+      resultCards.innerHTML = data.cards.map(c => `
+        <div class="r-card ${c.type}">
+          <div class="r-label">${c.label}</div>
+          <ul>${c.items.map(i => `<li>${i}</li>`).join('')}</ul>
+        </div>
+      `).join('');
+
+      resultNote.textContent = data.note;
+
+      resultPanel.classList.remove('show');
+      void resultPanel.offsetWidth; // アニメーション再トリガー
+      resultPanel.classList.add('show');
+
+      setTimeout(() => {
+        resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 80);
+    });
+  });
+
+
+  /* =============================================
+     FAQ データ
+  ============================================= */
+  const FAQS = [
+    {
+      q: '初診でも受診できますか？',
+      a: 'はい、初診の方も歓迎しています。はじめてのご来院でも丁寧にご案内いたしますので、お気軽にお越しください。受付状況や混雑状況についてはお電話またはホームページにてご確認ください。'
+    },
+    {
+      q: '予約は必要ですか？',
+      a: '受付方法についてはお電話（0263-32-8611）またはホームページにてご確認ください。受診の流れや当日の状況についてもお気軽にお尋ねください。'
+    },
+    {
+      q: '何を持っていけばいいですか？',
+      a: '健康保険証とお薬手帳（お持ちの方）をご持参ください。他の医療機関からの紹介状やレントゲン画像がある場合はお持ちいただくとスムーズです。「いつから・どこが・どのように痛むか」をメモしておくと、診察の参考になります。'
+    },
+    {
+      q: '駐車場はありますか？',
+      a: '第1・第2駐車場（計15台）をご利用いただけます。お車でのご来院も安心してお越しください。'
+    },
+    {
+      q: 'リハビリは受けられますか？',
+      a: '理学療法士による運動療法・物理療法に対応しています。まずは医師の診察を受けていただき、状態に合わせたリハビリをご案内いたします。継続的なリハビリのご相談もお気軽にどうぞ。'
+    },
+    {
+      q: '骨密度測定はできますか？',
+      a: '骨密度測定を実施しています。「最近転びやすくなった」「骨の強さが心配」という方は、受診の際にお気軽にご相談ください。'
+    },
+    {
+      q: 'どんな症状を相談できますか？',
+      a: '腰・膝・肩・首の痛み、手足のしびれ、捻挫・打撲などの外傷、スポーツのケガ、骨粗鬆症や骨密度のご不安、関節のこわばりや腫れなど、整形外科に関わる幅広い症状をご相談いただけます。「受診するほどでもないかも」と思っていても、気になることがあればお気軽にどうぞ。'
+    },
+  ];
+
+  /* FAQ 描画 */
+  const faqList = document.getElementById('faqList');
+  FAQS.forEach((faq, i) => {
+    const item = document.createElement('div');
+    item.className = 'faq-item';
+    item.innerHTML = `
+      <button class="faq-q" data-idx="${i}" aria-expanded="false">
+        <span class="faq-q-badge">Q</span>
+        <span class="faq-q-text">${faq.q}</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-a">${faq.a}</div>
+    `;
+    faqList.appendChild(item);
+  });
+
+  /* FAQ アコーディオン */
+  faqList.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ans    = btn.nextElementSibling;
+      const isOpen = btn.classList.contains('open');
+
+      faqList.querySelectorAll('.faq-q').forEach(b => {
+        b.classList.remove('open');
+        b.setAttribute('aria-expanded', 'false');
+        b.nextElementSibling.classList.remove('open');
+      });
+
+      if (!isOpen) {
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        ans.classList.add('open');
+      }
+    });
+  });
+
+  </script>
+</body>
+</html>
